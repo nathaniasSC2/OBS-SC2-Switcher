@@ -5,13 +5,14 @@
 
 static inline OBSWeakSource GetWeakSourceByName(const char *name)
 {
-	OBSWeakSource weak;
 	obs_source_t *source = obs_get_source_by_name(name);
-	if (source) {
-		weak = obs_source_get_weak_source(source);
-		obs_weak_source_release(weak);
-		obs_source_release(source);
-	}
+	if (!source)
+		return nullptr;
+
+	obs_weak_source_t *weak_raw = obs_source_get_weak_source(source);
+	OBSWeakSource weak = weak_raw;
+	obs_weak_source_release(weak_raw);
+	obs_source_release(source);
 
 	return weak;
 }

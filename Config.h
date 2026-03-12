@@ -169,23 +169,6 @@ static void LoadSaveHandler(obs_data_t *save_data, bool saving, void *) {
 		cfg->logging = obs_data_get_bool(obj, "logging");
 		cfg->switchOnLoad = obs_data_get_bool(obj, "switch_on_load");
 
-
-		obs_weak_source_release(cfg->inGameScene);
-		obs_weak_source_release(cfg->outGameScene);
-		obs_weak_source_release(cfg->replayScene);
-		obs_weak_source_release(cfg->obsScene);
-		obs_weak_source_release(cfg->menuScenes[MENU_SCORESCREEN]);
-		obs_weak_source_release(cfg->menuScenes[MENU_PROFILE]);
-		obs_weak_source_release(cfg->menuScenes[MENU_LOBBY]);
-		obs_weak_source_release(cfg->menuScenes[MENU_HOME]);
-		obs_weak_source_release(cfg->menuScenes[MENU_CAMPAIGN]);
-		obs_weak_source_release(cfg->menuScenes[MENU_COLLECTION]);
-		obs_weak_source_release(cfg->menuScenes[MENU_COOP]);
-		obs_weak_source_release(cfg->menuScenes[MENU_CUSTOM]);
-		obs_weak_source_release(cfg->menuScenes[MENU_REPLAYS]);
-		obs_weak_source_release(cfg->menuScenes[MENU_VERSUS]);
-
-
 		cfg->inGameScene = GetWeakSourceByName(obs_data_get_string(obj, "in_game_scene"));
 		cfg->outGameScene = GetWeakSourceByName(obs_data_get_string(obj, "out_game_scene"));
 		cfg->replayScene = GetWeakSourceByName(obs_data_get_string(obj, "replay_scene"));

@@ -22,7 +22,7 @@ ScoreTracker* ScoreTracker::Current() {
 }
 
 ScoreTracker::~ScoreTracker() {
-	delete _instance;
+	_instance = nullptr;
 }
 
 ScoreTracker::ScoreTracker(SC2Data *sc2): Observer(sc2){ 

@@ -19,7 +19,7 @@ class SC2Data : public QObject {
 	bool stopping;
 
   public:
-    explicit SC2Data(QObject* parent = Q_NULLPTR);
+    explicit SC2Data(QObject* parent = nullptr);
     virtual ~SC2Data();
     static SC2Data* Instance;
     void attach(Observer* obs);

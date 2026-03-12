@@ -1,4 +1,5 @@
 #pragma once
+#include <QObject>
 #include "Constants.h"
 #include "APIState.h"
 
@@ -6,7 +7,7 @@ class SC2State : public QObject {
 	Q_OBJECT
 
 	public:
-		explicit SC2State(QObject* parent = Q_NULLPTR);
+		explicit SC2State(QObject* parent = nullptr);
 		virtual ~SC2State();
 		int appState = 0;
 		int gameState = 0;

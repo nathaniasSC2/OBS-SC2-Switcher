@@ -19,7 +19,7 @@ SC2Data::SC2Data(QObject* parent)
 {
 	stopping = false;
 	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+	connect(timer, &QTimer::timeout, this, &SC2Data::update);
     timer->start(1500);
 	state = nullptr;
 }

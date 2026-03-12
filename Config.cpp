@@ -24,20 +24,8 @@ Config* Config::Current() {
 
 void Config::free(){
 	if (_instance) {
-		obs_weak_source_release(_instance->inGameScene);
-		obs_weak_source_release(_instance->outGameScene);
-		obs_weak_source_release(_instance->replayScene);
-		obs_weak_source_release(_instance->obsScene);
-		obs_weak_source_release(_instance->menuScenes[MENU_SCORESCREEN]);
-		obs_weak_source_release(_instance->menuScenes[MENU_PROFILE]);
-		obs_weak_source_release(_instance->menuScenes[MENU_LOBBY]);
-		obs_weak_source_release(_instance->menuScenes[MENU_HOME]);
-		obs_weak_source_release(_instance->menuScenes[MENU_CAMPAIGN]);
-		obs_weak_source_release(_instance->menuScenes[MENU_COLLECTION]);
-		obs_weak_source_release(_instance->menuScenes[MENU_COOP]);
-		obs_weak_source_release(_instance->menuScenes[MENU_CUSTOM]);
-		obs_weak_source_release(_instance->menuScenes[MENU_REPLAYS]);
-		obs_weak_source_release(_instance->menuScenes[MENU_VERSUS]);
+		delete _instance;
+		_instance = nullptr;
 	}
 }
 

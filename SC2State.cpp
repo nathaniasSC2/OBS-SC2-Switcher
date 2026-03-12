@@ -1,6 +1,4 @@
 #include <QObject>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <jansson.h>
 #include <typeinfo>
 #include "Constants.h"

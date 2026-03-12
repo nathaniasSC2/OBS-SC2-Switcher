@@ -1,4 +1,5 @@
 #include <obs-module.h>
+#include <obs-frontend-api.h>
 #include <QAction>
 #include <QMainWindow>
 
@@ -45,5 +46,7 @@ bool obs_module_load(void) {
 void obs_module_unload(void) {
 	Config::free();
 	delete sw;
+	delete st;
 	delete wh;
+	delete SC2Data::Instance;
 }
