@@ -1,72 +1,84 @@
-## OBS SC2Switcher
+# OBS SC2-Switcher
 
-## [Download](https://github.com/leigholiver/OBS-SC2Switcher/releases/latest/)
+A plugin for OBS Studio that automatically switches scenes and tracks scores for StarCraft II.
 
-## Installation: 
+## [Download Latest Release](https://github.com/nathaniasSC2/OBS-SC2-Switcher/releases/latest/)
+
+## Installation
+
 ### Windows
-(0.96 and below): [Install the dependencies](https://www.microsoft.com/en-us/download/details.aspx?id=40784)
-
-64bit: copy `sc2switcher.dll` from the zip file into `c:/program files (x86)/obs-studio/obs-plugins/64bit` directory
-
-32bit: copy `sc2switcher-32.dll` from the  zip file into `c:/program files (x86)/obs-studio/obs-plugins/32bit` directory 
+1. Download the latest `obs-sc2-switcher.dll`.
+2. Copy it to your OBS Studio plugins directory, typically:
+   `C:\Program Files\obs-studio\obs-plugins\64bit`
 
 ### Linux
-Copy `sc2switcher.so` from the zip file into your obs-plugins directory. For me this is `/usr/lib/obs-plugins/` but this may vary depending on your distro
+Copy `obs-sc2-switcher.so` to your OBS plugins directory (e.g., `/usr/lib/obs-plugins/`).
 
-## Usage: 
-In the Tools menu, click on SC2Switcher. 
+## Usage
+In the OBS **Tools** menu, select **SC2-Switcher**.
 
 ### Scene Switcher
-- Choose a scene to switch to in different menus/games 
-- All are optional and will fall back to the in game/out of game scenes
-- The observing scene requires you to have entered your username in the 'usernames' tab
+- Automatically switches scenes based on your current StarCraft II state (In-game, Menus, Replays, etc.).
+- All scene assignments are optional and will fall back to "In Game" or "Out of Game" defaults.
+- **Observing Scene:** Requires you to have your SC2 username entered in the "Usernames" tab.
 
 ### Score Tracker
-- Enter the name of the text source you are using for your scores
-- The text source will be updated with your score (mostly) automatically
-- If you play against a random player the plugin will ask you for their race
-- If you are neither player or both players (ie barcodes), the plugin will ask which player you were
-- There is a small chance that these notifications will take focus over sc2. If this is an issue you can untick 'Popups Enabled' and these will be ignored. You can use the buttons to update the score manually 
+- Updates a specified OBS text source with your current session score.
+- Detection is largely automatic, with occasional prompts for race or player identification (e.g., when playing as/against a Random player or barcode).
+- If popups are intrusive, they can be disabled in settings, and scores can be updated manually.
 
+### Game Webhook
+- Sends a JSON payload to a specified URL whenever you enter or exit a game.
+- Useful for external tools, stream overlays, or bots like [Ladderbet](https://github.com/leigholiver/ladderbet/).
 
-### Game Webhook 
-- When entering or leaving a game, the plugin will send a request to the specified url with information about the game for use in other applications
-- For an example of how this could be used you could check out [Ladderbet](https://github.com/leigholiver/ladderbet/), an automated twitch chat betting bot
-
-```
-event: 'enter' or 'exit',
-displayTime: ~,
-players: [
-	{
-		'name': ~,
-		'type': ~,
-		'race': 'Terr', 'Zerg' or 'Prot',
-		'result': 'Victory' or 'Defeat',
-		'isme': 'true' or 'false',
-	},
-]
-scores: {
-	'Terr', 'Zerg' or 'Prot': {
-		"Victory": ~,
-		"Defeat": ~
-	},
+```json
+{
+  "event": "enter | exit",
+  "displayTime": "...",
+  "players": [
+    {
+      "name": "...",
+      "type": "...",
+      "race": "Terr | Zerg | Prot",
+      "result": "Victory | Defeat",
+      "isme": "true | false"
+    }
+  ],
+  "scores": {
+    "Terr": { "Victory": 0, "Defeat": 0 },
+    "Zerg": { "Victory": 0, "Defeat": 0 },
+    "Prot": { "Victory": 0, "Defeat": 0 }
+  }
 }
 ```
-- Known issue: Scores may not update until the start of the next game if you change the score manually or come across one of the situations mentioned in the Score Tracker section
 
-## If you use a separate PC to stream: 
-Enter the IP address of your SC2 computer in the SC2 PC IP box.
-On your SC2 PC, open the Battle.net launcher, click Options, Game Settings, and under SC2, check 'Additional Command Line Arguments', and enter `-clientapi 6119` into the text box. 
+## Remote Streaming PC Setup
+If your OBS and StarCraft II are on different computers:
+1. Enter the IP address of your SC2 computer in the **SC2 PC IP** box in settings.
+2. On your SC2 PC, add `-clientapi 6119` to the SC2 launch arguments in the Battle.net launcher (Options > Game Settings > Additional Command Line Arguments).
+3. Verify the API is accessible by visiting `http://[SC2-PC-IP]:6119/ui` from your streaming PC.
 
-You can check that SC2 is configured correctly by going to `http://[Your SC2 PC IP]:6119/ui` in your browser on the streaming PC. It should look something like:
-`{"activeScreens":["ScreenBackgroundSC2/ScreenBackgroundSC2","ScreenReplay/ScreenReplay","ScreenNavigationSC2/ScreenNavigationSC2","ScreenForegroundSC2/ScreenForegroundSC2","ScreenBattlenet/ScreenBattlenet"]}`. 
+## Building from Source
 
-## Building from source:
-Make sure you have a version of obs-studio building properly [(instructions are here)](https://github.com/jp9000/obs-studio/wiki/Install-Instructions).
+### Dependencies
+- **CMake** (3.16+)
+- **Qt6** (Widgets, Core, Gui)
+- **libobs** & **obs-frontend-api**
+- **libcurl**
+- **jansson**
 
-Clone this repository into `[OBS Source Directory]/UI/frontend-plugins/SC2Switcher`
+### Build Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/nathaniasSC2/OBS-SC2-Switcher.git
+   cd OBS-SC2-Switcher
+   ```
+2. Create a build directory and run CMake:
+   ```bash
+   mkdir build && cd build
+   cmake ..
+   cmake --build . --config Release
+   ```
 
-Add the line `add_subdirectory(SC2Switcher)` to `[OBS Source Directory]/UI/frontend-plugins/CMakeLists.txt`
-
-Run CMake again and hit Configure, Generate, then Open Project
-
+---
+*Maintained by Nathanias. Based on the original work by Leigh Oliver.*
