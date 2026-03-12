@@ -1,6 +1,6 @@
-# OBS SC2-Switcher
+# OBS SC2-Switcher (Modern Port)
 
-A plugin for OBS Studio that automatically switches scenes and tracks scores for StarCraft II.
+A modern port of the SC2-Switcher plugin for OBS Studio. This version has been updated to support newer builds of OBS Studio (version 28 and above) and Qt6, fixing issues where the original plugin no longer functions.
 
 ## [Download Latest Release](https://github.com/nathaniasSC2/OBS-SC2-Switcher/releases/latest/)
 
