@@ -1,0 +1,86 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.6.3'
+          arch: 'win64_msvc2019_64'
+
+      - name: Setup OBS Dependencies
+        run: |
+          # Note: This is a placeholder. Real OBS plugin builds often require 
+          # downloading the OBS source or using a pre-built dependency package.
+          # For now, we'll try to find or simulate the needed libs.
+          echo "Setting up OBS dependencies..."
+
+      - name: Configure and Build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: obs-sc2-switcher-windows
+          path: build/Release/obs-sc2-switcher.dll
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake qt6-base-dev libobs-dev libcurl4-openssl-dev libjansson-dev
+
+      - name: Configure and Build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          make
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: obs-sc2-switcher-linux
+          path: build/obs-sc2-switcher.so
+
+  create-release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Windows Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: obs-sc2-switcher-windows
+
+      - name: Download Linux Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: obs-sc2-switcher-linux
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            obs-sc2-switcher.dll
+            obs-sc2-switcher.so
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
